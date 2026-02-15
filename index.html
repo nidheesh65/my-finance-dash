@@ -75,9 +75,14 @@
             <h3>Growth Simulator</h3>
             <div class="simulator-layout">
                 <div class="inputs">
-                    <input type="number" id="sim-monthly" placeholder="Monthly Invest ($)">
-                    <input type="number" id="sim-return" value="10" placeholder="Return %">
-                    <input type="number" id="sim-years" value="10" placeholder="Years">
+                    <label>Starting Balance ($)</label>
+                    <input type="number" id="sim-start" placeholder="Initial Amount" value="10000">
+                    <label>Monthly Invest ($)</label>
+                    <input type="number" id="sim-monthly" placeholder="Monthly contribution" value="1000">
+                    <label>Return %</label>
+                    <input type="number" id="sim-return" value="10">
+                    <label>Years</label>
+                    <input type="number" id="sim-years" value="10">
                     <button id="run-sim">Simulate</button>
                 </div>
                 <div class="chart-container">
