@@ -35,6 +35,29 @@ body { background: var(--bg); color: var(--text); padding: 15px; }
     padding: 20px;
     border: 1px solid rgba(255,255,255,0.05);
 }
+.simulator-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.simulator-layout .inputs {
+    flex: 1;
+    min-width: 200px;
+}
+
+.simulator-layout .chart-container {
+    flex: 2;
+    min-width: 300px;
+}
+
+label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    margin-top: 10px;
+}
 
 h3 { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
 
