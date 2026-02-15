@@ -1,25 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Nexus Finance</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5501/5501375.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
 <body>
     <nav class="navbar">
         <div class="logo">NEXUS<span>FINANCE</span></div>
         <div class="nav-actions">
-            <button id="privacy-toggle" class="btn-icon">🔒</button>
             <div class="fx-rate" id="fx-display">USD/INR: --.--</div>
         </div>
     </nav>
@@ -30,30 +12,36 @@
             <div class="tradingview-grid">
                 <div id="tv-voo" class="tv-widget"></div>
                 <div id="tv-qqq" class="tv-widget"></div>
-                <div id="tv-googl" class="tv-widget"></div>
                 <div id="tv-vxus" class="tv-widget"></div>
+                <div id="tv-googl" class="tv-widget"></div>
                 <div id="tv-nvda" class="tv-widget"></div>
                 <div id="tv-qcom" class="tv-widget"></div>
             </div>
         </section>
 
         <section class="card hero-card shadow-glow">
-            <h3>Monthly SWR (4% Rule)</h3>
+            <div class="card-header">
+                <h3>Monthly SWR (4% Rule)</h3>
+                <button class="local-toggle" data-target="swr-group">🔒</button>
+            </div>
             <div class="swr-display">
                 <span class="currency-symbol">₹</span>
-                <h1 id="swr-inr" class="privacy-target privacy-blur">0</h1>
+                <h1 id="swr-inr" class="privacy-target swr-group privacy-blur">0</h1>
             </div>
             <div class="swr-stats">
-                <div>Annual: <span id="swr-annual" class="privacy-target privacy-blur">₹0</span></div>
+                <div>Annual: <span id="swr-annual" class="privacy-target swr-group privacy-blur">₹0</span></div>
                 <div>Status: <span id="swr-status" class="status-pill">Stable</span></div>
             </div>
         </section>
 
         <section class="card">
-            <h3>Net Worth</h3>
+            <div class="card-header">
+                <h3>Net Worth</h3>
+                <button class="local-toggle" data-target="nw-group">🔒</button>
+            </div>
             <div class="nw-values">
-                <h2 id="nw-usd" class="privacy-target privacy-blur">$0</h2>
-                <h4 id="nw-inr-display" class="privacy-target privacy-blur">₹0</h4>
+                <h2 id="nw-usd" class="privacy-target nw-group privacy-blur">$0</h2>
+                <h4 id="nw-inr-display" class="privacy-target nw-group privacy-blur">₹0</h4>
             </div>
             <div class="input-group">
                 <input type="number" id="nw-input" placeholder="Current NW (USD)">
@@ -61,39 +49,45 @@
             </div>
         </section>
 
-        <section class="card full-width">
-            <h3>Growth Simulator</h3>
-            <div class="simulator-layout">
-                <div class="inputs">
-                    <label>Starting Balance ($)</label>
-                    <input type="number" id="sim-start" value="10000">
-                    <label>Monthly Invest ($)</label>
-                    <input type="number" id="sim-monthly" value="1000">
-                    <label>Return %</label>
-                    <input type="number" id="sim-return" value="10">
-                    <label>Years</label>
-                    <input type="number" id="sim-years" value="10">
-                    <button id="run-sim">Simulate</button>
-                </div>
-                <div class="chart-container">
-                    <canvas id="growthChart"></canvas>
-                </div>
-            </div>
-        </section>
-    </main>
+        ```
 
-    <footer class="footer">
-        <details>
-            <summary>System Settings</summary>
-            <div class="hidden-settings">
-                <button id="reset-data" class="btn-danger">Wipe Local Database</button>
-            </div>
-        </details>
-        <p>Nexus Finance &copy; 2026</p>
-    </footer>
+---
 
-    <div id="toast" class="toast hidden">Updated Successfully</div>
+### 📂 File 2: `css/styles.css`
+**Changes:** Styled the header of the cards to accommodate the local toggle buttons.
 
-    <script type="module" src="js/app.js"></script>
-</body>
-</html>
+```css
+/* ... Previous styles ... */
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.card-header h3 { margin-bottom: 0; }
+
+.local-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.local-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+}
+
+/* Ensure blur is strong */
+.privacy-blur {
+    filter: blur(12px) !important;
+    transition: filter 0.3s ease;
+}
+
+/* ... Rest of previous styles ... */
