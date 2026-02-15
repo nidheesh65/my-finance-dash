@@ -4,7 +4,7 @@ import { Charts } from './charts.js';
 
 let state = {
     nw: Storage.get('nw') || 0,
-    exp: Storage.get('exp') || 40000,
+    exp: Storage.get('exp') || 16000,
     fx: 83.5
 };
 
