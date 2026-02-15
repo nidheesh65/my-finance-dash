@@ -1,47 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Nexus Finance</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5501/5501375.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 <body>
     <nav class="navbar">
         <div class="logo">NEXUS<span>FINANCE</span></div>
         <div class="nav-actions">
+            <button id="privacy-toggle" class="btn-icon" title="Toggle Privacy Mode">👁️</button>
             <div class="fx-rate" id="fx-display">USD/INR: --.--</div>
         </div>
     </nav>
 
     <main class="dashboard-grid">
-        <section class="card full-width">
-            <h3>Market Overview</h3>
-            <div class="tradingview-grid">
-                <div id="tv-voo" class="tv-widget"></div>
-                <div id="tv-qqq" class="tv-widget"></div>
-                <div id="tv-vxus" class="tv-widget"></div>
-                <div id="tv-googl" class="tv-widget"></div>
-                <div id="tv-nvda" class="tv-widget"></div>
-                <div id="tv-qcom" class="tv-widget"></div>
-            </div>
-        </section>
-
         <section class="card hero-card shadow-glow">
-            <div class="card-header">
-                <h3>Monthly SWR (4% Rule)</h3>
-                <button class="local-toggle" data-target="swr-group">🔒</button>
-            </div>
+            <h3>Monthly SWR (4% Rule)</h3>
             <div class="swr-display">
                 <span class="currency-symbol">₹</span>
-                <h1 id="swr-inr" class="privacy-target swr-group privacy-blur">0</h1>
+                <h1 id="swr-inr" class="privacy-target">0</h1>
             </div>
             <div class="swr-stats">
-                <div>Annual: <span id="swr-annual" class="privacy-target swr-group privacy-blur">₹0</span></div>
+                <div>Annual: <span id="swr-annual" class="privacy-target">₹0</span></div>
                 <div>Status: <span id="swr-status" class="status-pill">Stable</span></div>
             </div>
         </section>
 
         <section class="card">
-            <div class="card-header">
-                <h3>Net Worth</h3>
-                <button class="local-toggle" data-target="nw-group">🔒</button>
-            </div>
+            <h3>Net Worth</h3>
             <div class="nw-values">
-                <h2 id="nw-usd" class="privacy-target nw-group privacy-blur">$0</h2>
-                <h4 id="nw-inr-display" class="privacy-target nw-group privacy-blur">₹0</h4>
+                <h2 id="nw-usd" class="privacy-target">$0</h2>
+                <h4 id="nw-inr-display" class="privacy-target">₹0</h4>
             </div>
             <div class="input-group">
                 <input type="number" id="nw-input" placeholder="Current NW (USD)">
@@ -49,5 +49,56 @@
             </div>
         </section>
 
-        ```
+        <section class="card">
+            <h3>FIRE Progress</h3>
+            <div class="progress-container">
+                <div class="progress-bar" id="fire-progress-bar" style="width: 0%"></div>
+            </div>
+            <p id="fire-status">0% to FI</p>
+            <div class="input-group mt-2">
+                <label>Annual Exp (USD)</label>
+                <input type="number" id="exp-input" value="40000">
+            </div>
+        </section>
 
+        <section class="card full-width">
+            <h3>Market Overview</h3>
+            <div class="tradingview-grid">
+                <div id="tv-voo" class="tv-widget"></div>
+                <div id="tv-qqq" class="tv-widget"></div>
+                <div id="tv-nvda" class="tv-widget"></div>
+                <div id="tv-googl" class="tv-widget"></div>
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <h3>Growth Simulator</h3>
+            <div class="simulator-layout">
+                <div class="inputs">
+                    <input type="number" id="sim-monthly" placeholder="Monthly Invest ($)">
+                    <input type="number" id="sim-return" value="10" placeholder="Return %">
+                    <input type="number" id="sim-years" value="10" placeholder="Years">
+                    <button id="run-sim">Simulate</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <details>
+            <summary>System Settings</summary>
+            <div class="hidden-settings">
+                <button id="reset-data" class="btn-danger">Wipe All Local Data</button>
+            </div>
+        </details>
+        <p>Nexus Finance &copy; 2026</p>
+    </footer>
+
+    <div id="toast" class="toast hidden">Data Saved</div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
