@@ -14,6 +14,30 @@ async function init() {
     Charts.initGrowth(document.getElementById('growthChart'));
     updateUI();
 
+    // Growth Simulator with Starting Balance
+    document.getElementById('run-sim').onclick = () => {
+        const p = parseFloat(document.getElementById('sim-start').value) || 0;
+        const m = parseFloat(document.getElementById('sim-monthly').value) || 0;
+        const r = parseFloat(document.getElementById('sim-return').value) || 0;
+        const y = parseInt(document.getElementById('sim-years').value) || 0;
+        
+        let labels = [], values = [];
+        for(let i=0; i<=y; i++) { 
+            labels.push(`Year ${i}`); 
+            values.push(Finance.getFV(p, m, r, i)); 
+        }
+        Charts.update(labels, values);
+    };
+
+    // Privacy Toggle Logic
+    document.getElementById('privacy-toggle').onclick = (e) => {
+        const targets = document.querySelectorAll('.privacy-target');
+        const isBlurred = targets[0].classList.contains('privacy-blur');
+        
+        targets.forEach(el => el.classList.toggle('privacy-blur'));
+        e.target.innerText = isBlurred ? '👁️' : '🔒';
+    };
+
     document.getElementById('update-nw-btn').onclick = () => {
         state.nw = parseFloat(document.getElementById('nw-input').value) || 0;
         Storage.save('nw', state.nw);
@@ -21,20 +45,21 @@ async function init() {
         showToast();
     };
 
-    document.getElementById('run-sim').onclick = () => {
-        const m = parseFloat(document.getElementById('sim-monthly').value) || 0;
-        const r = parseFloat(document.getElementById('sim-return').value) || 0;
-        const y = parseInt(document.getElementById('sim-years').value) || 0;
-        let labels = [], values = [];
-        for(let i=0; i<=y; i++) { labels.push(`Y${i}`); values.push(Finance.getFV(m, r, i)); }
-        Charts.update(labels, values);
-    };
-
-    document.getElementById('privacy-toggle').onclick = () => {
-        document.querySelectorAll('.privacy-target').forEach(el => el.classList.toggle('privacy-blur'));
-    };
-
     document.getElementById('reset-data').onclick = () => Storage.clear();
+}
+
+function setupTV() {
+    const tickers = ['VOO', 'GOOGL', 'QQQ', 'VXUS', 'NVDA','QCOM'];
+    tickers.forEach(s => {
+        new TradingView.MediumWidget({
+            "symbols": [[s, s]],
+            "width": "100%",
+            "height": "100%",
+            "colorTheme": "dark",
+            "chartOnly": true,
+            "container_id": `tv-${s.toLowerCase()}`
+        });
+    });
 }
 
 async function fetchFx() {
@@ -43,7 +68,7 @@ async function fetchFx() {
         const data = await res.json();
         state.fx = data.rates.INR;
         document.getElementById('fx-display').innerText = `USD/INR: ${state.fx.toFixed(2)}`;
-    } catch(e) { console.warn("Using fallback FX"); }
+    } catch(e) { console.warn("FX Fallback used"); }
 }
 
 function updateUI() {
@@ -55,15 +80,6 @@ function updateUI() {
 
     const progress = Math.min((state.nw / (state.exp * 25)) * 100, 100);
     document.getElementById('fire-progress-bar').style.width = `${progress}%`;
-    document.getElementById('fire-status').innerText = `${progress.toFixed(1)}% to FI`;
-}
-
-function setupTV() {
-    ['VOO', 'QQQ', 'NVDA', 'GOOGL'].forEach(s => {
-        new TradingView.MediumWidget({
-            "symbols": [[s, s]], "width": "100%", "height": "100%", "colorTheme": "dark", "container_id": `tv-${s.toLowerCase()}`
-        });
-    });
 }
 
 function showToast() {
