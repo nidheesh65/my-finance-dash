@@ -22,11 +22,16 @@ async function init() {
     };
 
     document.getElementById('run-sim').onclick = () => {
+        const p = parseFloat(document.getElementById('sim-start').value) || 0;
         const m = parseFloat(document.getElementById('sim-monthly').value) || 0;
         const r = parseFloat(document.getElementById('sim-return').value) || 0;
         const y = parseInt(document.getElementById('sim-years').value) || 0;
+        
         let labels = [], values = [];
-        for(let i=0; i<=y; i++) { labels.push(`Y${i}`); values.push(Finance.getFV(m, r, i)); }
+        for(let i=0; i<=y; i++) { 
+            labels.push(`Year ${i}`); 
+            values.push(Finance.getFV(p, m, r, i)); 
+        }
         Charts.update(labels, values);
     };
 
