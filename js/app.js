@@ -14,13 +14,31 @@ async function init() {
     Charts.initGrowth(document.getElementById('growthChart'));
     updateUI();
 
-    // Growth Simulator with Starting Balance
+    // Local Privacy Toggle
+    document.querySelectorAll('.local-toggle').forEach(btn => {
+        btn.onclick = () => {
+            const groupClass = btn.getAttribute('data-target');
+            const targets = document.querySelectorAll(`.${groupClass}`);
+            const isBlurred = targets[0].classList.contains('privacy-blur');
+            targets.forEach(el => el.classList.toggle('privacy-blur'));
+            btn.innerText = isBlurred ? '👁️' : '🔒';
+        };
+    });
+
+    // Update Net Worth
+    document.getElementById('update-nw-btn').onclick = () => {
+        state.nw = parseFloat(document.getElementById('nw-input').value) || 0;
+        Storage.save('nw', state.nw);
+        updateUI();
+        showToast();
+    };
+
+    // Simulator
     document.getElementById('run-sim').onclick = () => {
         const p = parseFloat(document.getElementById('sim-start').value) || 0;
         const m = parseFloat(document.getElementById('sim-monthly').value) || 0;
         const r = parseFloat(document.getElementById('sim-return').value) || 0;
         const y = parseInt(document.getElementById('sim-years').value) || 0;
-        
         let labels = [], values = [];
         for(let i=0; i<=y; i++) { 
             labels.push(`Year ${i}`); 
@@ -29,35 +47,16 @@ async function init() {
         Charts.update(labels, values);
     };
 
-    // Privacy Toggle Logic
-    document.getElementById('privacy-toggle').onclick = (e) => {
-        const targets = document.querySelectorAll('.privacy-target');
-        const isBlurred = targets[0].classList.contains('privacy-blur');
-        
-        targets.forEach(el => el.classList.toggle('privacy-blur'));
-        e.target.innerText = isBlurred ? '👁️' : '🔒';
-    };
-
-    document.getElementById('update-nw-btn').onclick = () => {
-        state.nw = parseFloat(document.getElementById('nw-input').value) || 0;
-        Storage.save('nw', state.nw);
-        updateUI();
-        showToast();
-    };
-
     document.getElementById('reset-data').onclick = () => Storage.clear();
 }
 
 function setupTV() {
-    const tickers = ['VOO', 'GOOGL', 'QQQ', 'VXUS', 'NVDA','QCOM'];
+    // Exact requested order
+    const tickers = ['VOO', 'QQQ', 'VXUS', 'GOOGL', 'NVDA', 'QCOM'];
     tickers.forEach(s => {
         new TradingView.MediumWidget({
-            "symbols": [[s, s]],
-            "width": "100%",
-            "height": "100%",
-            "colorTheme": "dark",
-            "chartOnly": true,
-            "container_id": `tv-${s.toLowerCase()}`
+            "symbols": [[s, s]], "width": "100%", "height": "100%", 
+            "colorTheme": "dark", "chartOnly": true, "container_id": `tv-${s.toLowerCase()}`
         });
     });
 }
@@ -68,7 +67,7 @@ async function fetchFx() {
         const data = await res.json();
         state.fx = data.rates.INR;
         document.getElementById('fx-display').innerText = `USD/INR: ${state.fx.toFixed(2)}`;
-    } catch(e) { console.warn("FX Fallback used"); }
+    } catch(e) { console.warn("Using FX Fallback"); }
 }
 
 function updateUI() {
@@ -77,9 +76,6 @@ function updateUI() {
     document.getElementById('swr-annual').innerText = `₹${Math.round(swr.annual).toLocaleString('en-IN')}`;
     document.getElementById('nw-usd').innerText = `$${state.nw.toLocaleString()}`;
     document.getElementById('nw-inr-display').innerText = `₹${Math.round(state.nw * state.fx).toLocaleString('en-IN')}`;
-
-    const progress = Math.min((state.nw / (state.exp * 25)) * 100, 100);
-    document.getElementById('fire-progress-bar').style.width = `${progress}%`;
 }
 
 function showToast() {
